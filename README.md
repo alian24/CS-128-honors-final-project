@@ -38,10 +38,11 @@ Design the user interface, allowing for user input of their word and Pokémon.
 
 Consider error handling as well as any additional features that we think of at this time.
 
-#Possible Challenges
+# Possible Challenges
 
 Out of the MPs and HWs so far in this course, we haven’t had any practice with user input and UI design, so that could potentially be a challenge.
 
 
-References
+# References
+
 Inspired by the Vigenère cipher by Giovan Battista Bellaso
