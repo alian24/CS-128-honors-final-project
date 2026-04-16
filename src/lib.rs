@@ -20,4 +20,29 @@ impl VigenereCipher {
         return shifted;
 
     }
+    
+    pub fn vigenere_encrypt(&self, original_message: &str) -> String {
+        let mut encrypted_message: String = Default::default();
+        // Filters out non ascii characters and non letters (numbers, spaces, ect.)
+        // Then makes the characters uppercase to work with the caesar_shift function
+        let key_iter: Vec<char>  = self.key.chars().filter(|c| c.is_ascii_alphabetic()).map(|c| c.to_ascii_uppercase()).collect();
+
+        let mut key_idx = 0;
+        // Iterates through the original_message characters running caeser_shift for all the valid chars
+        for c in original_message.chars() {
+            if c.is_ascii_alphabetic() {
+                let shift_letter = key_iter[key_idx];
+
+                // turns c upper case to work with caesar_shift;
+                let c_upper = c.to_ascii_uppercase();
+                let shifted_char = Self::caesar_shift(c_upper, shift_letter);
+                encrypted_message.push(shifted_char);
+                //Key index wraps back if it reaches end of key
+                key_idx = (key_idx + 1) % key_iter.len();
+            } else {
+                encrypted_message.push(c);
+            }
+        }
+        encrypted_message
+    }
 }
