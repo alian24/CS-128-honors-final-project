@@ -3,25 +3,31 @@ pub struct VigenereCipher {
 }
 
 impl VigenereCipher {
-    pub fn new(key: &str) -> VigenereCipher {
-        VigenereCipher {
-            key : key.to_string(),
+    pub fn new(key: &str) -> Result<VigenereCipher, String> {
+        if !Self::is_valid_pokemon(key) {
+            return Err("Invalid Pokemon name for the key".to_string());
         }
+
+        Ok(VigenereCipher {
+            key : key.to_string(),
+        })
     }
 
     //Takes in a letter and shifts it by the shift letter
     //Assumption: Key and the input text is/ will end up as uppercase
     pub fn caesar_shift(letter: char, shift_letter: char, encrypt: bool) -> char {
-        let shift = shift_letter.to_ascii_uppercase() as u8 - b'A';
         let base = b'A';
-        // If encrypt is false, then we will "decipher" the letter
-        let shift  = if encrypt {
-            (letter as u8 + shift - base) % 26
+
+        let letter_val = letter as u8 - base;
+        let shift = shift_letter.to_ascii_uppercase() as u8 - base;
+
+        let result = if encrypt {
+            (letter_val + shift) % 26
         } else {
-            (letter as u8 - shift - base + 26) % 26
+            (letter_val + 26 - shift) % 26
         };
 
-        (shift + base) as char
+        (result + base) as char
     }
     
     pub fn vigenere_encrypt(&self, original_message: &str) -> String {
@@ -72,5 +78,11 @@ impl VigenereCipher {
             }
         }
         decipered_message
+    }
+
+    pub fn is_valid_pokemon(name: &str) -> bool {
+        let input = name.trim();
+
+        pokemon_rs::get_id_by_name(input, None) != 0
     }
 }
