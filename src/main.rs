@@ -1,10 +1,8 @@
-use dummy_project::VigenereCipher;
+use vigenere_poke::VigenereCipher;
 
 fn main() {
+
     let key : &str = "Pikachu";
-    //Stills errors if the key is not a Pokemon, fix later, however it works if the key is a pokemon.
-    //The errors seems come from the crate
-    //Goal: print the error on the gui instead of crashing
     let cipher : VigenereCipher = match VigenereCipher::new(&key) {
         Ok(c) => c,
         Err(e) => {

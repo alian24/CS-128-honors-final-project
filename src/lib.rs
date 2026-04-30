@@ -83,6 +83,13 @@ impl VigenereCipher {
     pub fn is_valid_pokemon(name: &str) -> bool {
         let input = name.trim();
 
-        pokemon_rs::get_id_by_name(input, None) != 0
+        let result = std::panic::catch_unwind(|| {
+            pokemon_rs::get_id_by_name(input, None)
+        });
+
+        match result {
+            Ok(id) => id != 0,
+            Err(_) => false, // panic occurred, treat as invalid Pokémon
+        }
     }
 }

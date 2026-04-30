@@ -1,7 +1,6 @@
 [package]
-name = "dummy_project"
+name = "vigenere_poke"
 version = "0.1.0"
-authors = ["Canchen Li <canchen4@illinois.edu>"]
 edition = "2021"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
