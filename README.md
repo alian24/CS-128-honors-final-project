@@ -1,4 +1,4 @@
-# CS-128-honors-final-project - Poke Cipherers
+# CS-128-honors-final-project - PokeVigenere Cipher
 
 Group member names and NetIDs:
 
