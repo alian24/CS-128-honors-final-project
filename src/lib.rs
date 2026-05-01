@@ -16,10 +16,14 @@ impl VigenereCipher {
     //Takes in a letter and shifts it by the shift letter
     //Assumption: Key and the input text is/ will end up as uppercase
     pub fn caesar_shift(letter: char, shift_letter: char, encrypt: bool) -> char {
-        let base = b'A';
+        if !letter.is_ascii_alphabetic() {
+            return letter;
+        }
+
+        let base = if letter.is_ascii_uppercase() { b'A' } else { b'a' };
 
         let letter_val = letter as u8 - base;
-        let shift = shift_letter.to_ascii_uppercase() as u8 - base;
+        let shift = shift_letter.to_ascii_uppercase() as u8 - b'A';
 
         let result = if encrypt {
             (letter_val + shift) % 26
@@ -42,9 +46,7 @@ impl VigenereCipher {
             if c.is_ascii_alphabetic() {
                 let shift_letter = key_iter[key_idx];
 
-                // turns c upper case to work with caesar_shift;
-                let c_upper = c.to_ascii_uppercase();
-                let shifted_char = Self::caesar_shift(c_upper, shift_letter, true);
+                let shifted_char = Self::caesar_shift(c, shift_letter, true);
                 encrypted_message.push(shifted_char);
                 //Key index wraps back if it reaches end of key
                 key_idx = (key_idx + 1) % key_iter.len();
@@ -67,9 +69,7 @@ impl VigenereCipher {
             if c.is_ascii_alphabetic() {
                 let shift_letter = key_iter[key_idx];
 
-                // turns c upper case to work with caesar_shift;
-                let c_upper = c.to_ascii_uppercase();
-                let shifted_char = Self::caesar_shift(c_upper, shift_letter, false);
+                let shifted_char = Self::caesar_shift(c, shift_letter, false);
                 decipered_message.push(shifted_char);
                 //Key index wraps back if it reaches end of key
                 key_idx = (key_idx + 1) % key_iter.len();
@@ -81,10 +81,21 @@ impl VigenereCipher {
     }
 
     pub fn is_valid_pokemon(name: &str) -> bool {
-        let input = name.trim();
+        let mut input = String::new();
+        let mut capitalize_next = true;
+
+        for c in name.trim().to_lowercase().chars() {
+            if capitalize_next && c.is_alphabetic() {
+                input.extend(c.to_uppercase());
+                capitalize_next = false;
+            } else {
+                input.push(c);
+                capitalize_next = c == ' ' || c == '-';
+            }
+        }
 
         let result = std::panic::catch_unwind(|| {
-            pokemon_rs::get_id_by_name(input, None)
+            pokemon_rs::get_id_by_name(&input, None)
         });
 
         match result {
